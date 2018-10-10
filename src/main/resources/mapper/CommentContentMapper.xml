@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.CommentContentMapper">
+  <resultMap id="CommentContent" type="com.xd.evaluation.domain.CommentContent">
+    <constructor>
+      <idArg column="comment_content_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="comment_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="comment_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    comment_content_id, comment_id, create_time, update_time, comment_content
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="CommentContent">
+    select 
+    <include refid="Base_Column" />
+    from comment_content
+    where comment_content_id = #{commentContentId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey">
+    delete from comment_content
+    where comment_content_id = #{commentContentId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert">
+    insert into comment_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="commentContent != null">
+        comment_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="commentContent != null">
+        #{commentContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey">
+    update comment_content
+    <set>
+      <if test="commentId != null">
+        comment_id = #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="commentContent != null">
+        comment_content = #{commentContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where comment_content_id = #{commentContentId,jdbcType=BIGINT}
+  </update>
+</mapper>

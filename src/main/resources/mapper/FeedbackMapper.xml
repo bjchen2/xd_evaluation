@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.FeedbackMapper">
+  <resultMap id="Feedback" type="com.xd.evaluation.domain.Feedback">
+    <constructor>
+      <idArg column="feedback_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    feedback_id, user_id, title, create_time, update_time, content
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="Feedback">
+    select 
+    <include refid="Base_Column" />
+    from feedback
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey">
+    delete from feedback
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert">
+    insert into feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey">
+    update feedback
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where feedback_id = #{feedbackId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

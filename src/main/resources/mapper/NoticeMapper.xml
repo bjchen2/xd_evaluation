@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.NoticeMapper">
+  <resultMap id="Notice" type="com.xd.evaluation.domain.Notice">
+    <constructor>
+      <idArg column="notice_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="type" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="author_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="image" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    notice_id, type, title, author_name, image, create_time, update_time, content
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="Notice">
+    select 
+    <include refid="Base_Column" />
+    from notice
+    where notice_id = #{noticeId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey">
+    delete from notice
+    where notice_id = #{noticeId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert">
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="authorName != null">
+        author_name,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="authorName != null">
+        #{authorName,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey">
+    update notice
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="authorName != null">
+        author_name = #{authorName,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

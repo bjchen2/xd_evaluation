@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.UserLikeMapper">
+  <resultMap id="Like" type="com.xd.evaluation.domain.UserLike">
+    <constructor>
+      <idArg column="like_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="obj_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="is_like" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+      <arg column="like_type" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column">
+    like_id, user_id, obj_id, is_like, like_type, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="Like">
+    select 
+    <include refid="Base_Column" />
+    from user_like
+    where like_id = #{likeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey">
+    delete from user_like
+    where like_id = #{likeId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert">
+    insert into user_like
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="objId != null">
+        obj_id,
+      </if>
+      <if test="isLike != null">
+        is_like,
+      </if>
+      <if test="likeType != null">
+        like_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="objId != null">
+        #{objId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        #{isLike,jdbcType=TINYINT},
+      </if>
+      <if test="likeType != null">
+        #{likeType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey">
+    update user_like
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="objId != null">
+        obj_id = #{objId,jdbcType=BIGINT},
+      </if>
+      <if test="isLike != null">
+        is_like = #{isLike,jdbcType=TINYINT},
+      </if>
+      <if test="likeType != null">
+        like_type = #{likeType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where like_id = #{likeId,jdbcType=BIGINT}
+  </update>
+</mapper>

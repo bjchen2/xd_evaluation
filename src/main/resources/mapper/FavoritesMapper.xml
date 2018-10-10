@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.FavoritesMapper">
+  <resultMap id="Favorite" type="com.xd.evaluation.domain.Favorite">
+    <constructor>
+      <idArg column="favorite_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="evaluation_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    favorite_id, user_id, evaluation_id, create_time, update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="Favorite">
+    select 
+    <include refid="Base_Column" />
+    from favorite
+    where favorite_id = #{favoriteId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" >
+    delete from favorite
+    where favorite_id = #{favoriteId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" >
+    insert into favorite
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="evaluationId != null">
+        evaluation_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey" >
+    update favorite
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationId != null">
+        evaluation_id = #{evaluationId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where favorite_id = #{favoriteId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

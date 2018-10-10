@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.EvaluationContentMapper">
+  <resultMap id="EvaluationContent" type="com.xd.evaluation.domain.EvaluationContent">
+    <constructor>
+      <idArg column="evaluation_content_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="evaluation_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="evaluation_content" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    evaluation_content_id, evaluation_id, create_time, update_time, evaluation_content
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="EvaluationContent">
+    select 
+    <include refid="Base_Column" />
+    from evaluation_content
+    where evaluation_content_id = #{evaluationContentId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey">
+    delete from evaluation_content
+    where evaluation_content_id = #{evaluationContentId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" >
+    insert into evaluation_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="evaluationId != null">
+        evaluation_id,
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationContent != null">
+        #{evaluationContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey">
+    update evaluation_content
+    <set>
+      <if test="evaluationId != null">
+        evaluation_id = #{evaluationId,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationContent != null">
+        evaluation_content = #{evaluationContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where evaluation_content_id = #{evaluationContentId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xd.evaluation.dao.mapper.EvaluationMapper">
+  <resultMap id="Evaluation" type="com.xd.evaluation.domain.Evaluation">
+    <constructor>
+      <idArg column="evaluation_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="evaluation_text_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="teacher_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="course_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="course_type" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="is_recommended" javaType="java.lang.Boolean" jdbcType="TINYINT" />
+      <arg column="agree_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="disagree_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <sql id="Base_Column">
+    evaluation_id, user_id, evaluation_text_id, teacher_name, course_name, course_type, 
+    is_recommended, agree_count, disagree_count, create_time, update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="Evaluation">
+    select 
+    <include refid="Base_Column" />
+    from evaluation
+    where evaluation_id = #{evaluationId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from evaluation
+    where evaluation_id = #{evaluationId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" >
+    insert into evaluation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="evaluationContentId != null">
+        evaluation_text_id,
+      </if>
+      <if test="teacherName != null">
+        teacher_name,
+      </if>
+      <if test="courseName != null">
+        course_name,
+      </if>
+      <if test="courseType != null">
+        course_type,
+      </if>
+      <if test="isRecommended != null">
+        is_recommended,
+      </if>
+      <if test="agreeCount != null">
+        agree_count,
+      </if>
+      <if test="disagreeCount != null">
+        disagree_count,
+      </if>
+    </trim>
+
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="evaluationContentId != null">
+        #{evaluationContentId,jdbcType=BIGINT},
+      </if>
+      <if test="teacherName != null">
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null">
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null">
+        #{courseType,jdbcType=TINYINT},
+      </if>
+      <if test="isRecommended != null">
+        #{isRecommended,jdbcType=TINYINT},
+      </if>
+      <if test="agreeCount != null">
+        #{agreeCount,jdbcType=INTEGER},
+      </if>
+      <if test="disagreeCount != null">
+        #{disagreeCount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKey">
+    update evaluation
+    <set>
+      <if test="evaluationContentId != null">
+        evaluation_text_id = #{evaluationContentId,jdbcType=BIGINT},
+      </if>
+      <if test="teacherName != null">
+        teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null">
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null">
+        course_type = #{courseType,jdbcType=TINYINT},
+      </if>
+      <if test="isRecommended != null">
+        is_recommended = #{isRecommended,jdbcType=TINYINT},
+      </if>
+      <if test="agreeCount != null">
+        agree_count = #{agreeCount,jdbcType=INTEGER},
+      </if>
+      <if test="disagreeCount != null">
+        disagree_count = #{disagreeCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where evaluation_id = #{evaluationId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

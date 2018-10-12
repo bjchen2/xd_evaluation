@@ -18,7 +18,7 @@ import java.util.List;
  * Created By Cx On 2018/10/9 21:44
  */
 @RestController
-@RequestMapping("comment")
+@RequestMapping(value = "/comment")
 public class CommentController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class CommentController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/{evaluationId}/{userId}")
+    @RequestMapping(value = "/{evaluationId}/{userId}", method = RequestMethod.GET)
     public ResultVO returnAllComment(@PathVariable Long evaluationId, @PathVariable Long userId)
         throws Exception {
         LOGGER.info("用户 " + userId + " 请求查询 " + evaluationId + " 号评价所有评论");
@@ -59,8 +59,8 @@ public class CommentController {
      * @throws Exception
      */
     @PostMapping("")
-    public ResultVO addOneComment(Long userId, Long evaluationId, String commentContent)
-        throws Exception {
+    public ResultVO addOneComment(@RequestBody Long userId,@RequestBody Long evaluationId,
+                                  @RequestBody String commentContent) throws Exception {
         LOGGER.info("用户 " + userId + " 请求添加一条评论");
         if(null == evaluationId || null == userId) {    // 异常请求
             LOGGER.error(request.getRemoteAddr() + ": 异常请求，id不能为空");

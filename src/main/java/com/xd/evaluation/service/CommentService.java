@@ -21,4 +21,13 @@ public interface CommentService {
      * @throws Exception
      */
     List<CommentInfo> returnAllComments(Long evaluationId, Long userId) throws Exception;
+
+    /**
+     * 添加一条评价的评论
+     * @param userId 评论人id
+     * @param evaluationId 评论的评价id
+     * @param content 评论内容
+     * @throws Exception
+     */
+    void addComment(Long userId, Long evaluationId, String content) throws Exception;
 }

@@ -1,5 +1,6 @@
 package com.xd.evaluation.service.impl;
 
+import com.xd.evaluation.VO.ResultVO;
 import com.xd.evaluation.config.WeChatAccountConfig;
 import com.xd.evaluation.dao.repository.CommentRepository;
 import com.xd.evaluation.dao.repository.FeedbackRepository;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class UserServiceImpTest {
     @Autowired
     CommentService commentService;
 
+    private RestTemplate template = new RestTemplate();
+
     @Test
     public void getOne() {
         System.out.println("===========================================================");
@@ -60,6 +64,19 @@ public class UserServiceImpTest {
     public void getCommentsTest() throws Exception {
     //    commentRepository.findAllByEvaluationId(1L);
        List<CommentInfo> comments = commentService.returnAllComments(1L, 20L);
+    }
+
+    @Test
+    @Rollback(false)
+    public void addCommentTest() throws Exception {
+       commentService.addComment(30L,25L, "测试内容测试内容3");
+    }
+
+    @Test
+    public void requestQueryCommentTest() throws Exception {
+        String url = "http://localhost:8080/comment/1/20";
+        ResultVO res = template.getForObject(url, ResultVO.class);
+        int a = 1;
     }
 
 }

@@ -37,13 +37,14 @@ public class CommentServiceImp implements CommentService {
     @Autowired
     private UserLikeRepository userLikeRepository;
 
+    //TODO: 用原生sql改写
     @Override
     public List<CommentInfo> returnAllComments(Long evaluationId, Long userId) throws Exception {
         List<Comment> commentList = commentRepository.findAllByEvaluationId(evaluationId);
 
         // 假如查询不到结果
-        if(commentList.isEmpty())
-            throw new Exception("查询不到id为" + evaluationId + "的评价下的评论");
+        if(commentList.isEmpty()) return null;  // 说明当前评价下没有任何评论
+
         List<CommentInfo> comments = new ArrayList<>(); // 返回的主体
 
         for(Comment comment: commentList) { // 查询出commentContent和isLike两个数据
@@ -64,5 +65,28 @@ public class CommentServiceImp implements CommentService {
             comments.add(commentInfo);
         }
         return comments;
+    }
+
+    @Override
+
+    public void addComment(Long userId, Long evaluationId, String content) throws Exception {
+        Comment comment = new Comment();
+        comment.setUserId(userId);
+        comment.setEvaluationId(evaluationId);
+        comment.setAgreeCount(0);
+        comment.setDisagreeCount(0);
+
+        Comment resComment = commentRepository.save(comment);
+
+        CommentContent commentContent = new CommentContent();  // 创建content实体
+        commentContent.setCommentId(resComment.getCommentId());    // save操作后会把插入的id返回到res
+        commentContent.setCommentContent(content);
+
+        CommentContent resContent = commentContentRepository.save(commentContent);
+
+        // 把resContent中的id更新到comment表中
+        commentRepository
+                .updateCommentContentIdByCommentId(resContent.getCommentContentId(),
+                                                resComment.getCommentId());
     }
 }

@@ -8,6 +8,7 @@ import com.xd.evaluation.domain.CommentContent;
 import com.xd.evaluation.domain.UserLike;
 import com.xd.evaluation.dto.CommentInfo;
 import com.xd.evaluation.service.CommentService;
+import com.xd.evaluation.utils.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,11 @@ public class CommentServiceImp implements CommentService {
             commentInfo.setCommentContent(content.getCommentContent());
 
             UserLike userLike = userLikeRepository
-                    .findByLikeTypeAndObjIdAndUserId(10, comment.getCommentId(), userId);
+                    .findByLikeTypeAndObjIdAndUserId(11, comment.getCommentId(), userId);
             if(userLike == null) {  // 如果查询不到数据就说明用户没有点赞
-                commentInfo.setIsLiked(null);
+                commentInfo.setIsLike(null);
             } else {
-                commentInfo.setIsLiked(userLike.getIsLike());
+                commentInfo.setIsLike(userLike.getIsLike());
             }
             BeanUtils.copyProperties(comment, commentInfo);
             comments.add(commentInfo);

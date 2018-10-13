@@ -33,7 +33,7 @@ public class CommentInfo {
     private Integer disagreeCount;
 
     // 是否点赞了
-    private Boolean isLiked;
+    private Boolean isLike;
 
     //创建时间
     private Date createTime;

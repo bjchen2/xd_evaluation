@@ -2,6 +2,7 @@ package com.xd.evaluation.service.impl;
 
 import com.xd.evaluation.VO.ResultVO;
 import com.xd.evaluation.config.WeChatAccountConfig;
+import com.xd.evaluation.controller.CommentController;
 import com.xd.evaluation.dao.repository.CommentRepository;
 import com.xd.evaluation.dao.repository.FeedbackRepository;
 import com.xd.evaluation.dao.repository.UserLikeRepository;
@@ -16,12 +17,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 /**
@@ -43,7 +54,7 @@ public class UserServiceImpTest {
     @Autowired
     CommentService commentService;
 
-    private RestTemplate template = new RestTemplate();
+    private MockMvc mvc;
 
     @Test
     public void getOne() {
@@ -74,9 +85,21 @@ public class UserServiceImpTest {
 
     @Test
     public void requestQueryCommentTest() throws Exception {
+        this.mvc = MockMvcBuilders.standaloneSetup(new CommentController()).build();
         String url = "http://localhost:8080/comment/1/20";
-        ResultVO res = template.getForObject(url, ResultVO.class);
-        int a = 1;
+        RequestBuilder req = get("/comment/1/20");
+        mvc.perform(req).andExpect(status().isOk());
     }
+
+//    @Test
+//    public void requestAddCommentTest() throws Exception {
+//        String url = "http://localhost:8080/comment";
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("userId", 30L);
+//        map.put("evaluationId", 20L);
+//        map.put("commentContent", "测试444444");
+//        ResultVO res = template.postForObject(url, map, ResultVO.class);
+//        int a = 1;
+//    }
 
 }

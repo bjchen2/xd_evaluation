@@ -21,7 +21,8 @@ public interface EvaluationService {
      * 删除一条 点赞/反对 评价信息
      * @param userId
      * @param evaId
+     * @param isLike true：要删除的是点赞信息
      * @throws Exception
      */
-    void cancelLikeEvaluation(Long userId, Long evaId) throws Exception;
+    void cancelLikeEvaluation(Long userId, Long evaId, Boolean isLike) throws Exception;
 }

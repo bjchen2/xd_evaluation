@@ -61,7 +61,6 @@ public class EvaluationServiceImp implements EvaluationService {
     }
 
     @Override
-    public void cancelLikeEvaluation(Long userId, Long evaId) throws Exception {
-
+    public void cancelLikeEvaluation(Long userId, Long evaId, Boolean isLike) throws Exception {
     }
 }

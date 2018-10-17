@@ -18,9 +18,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findAllByEvaluationId(Long evaluationId);
 
-    @Modifying
-    @Query(value = "UPDATE comment SET comment_content_id = :contentId WHERE comment_id = :commentId",
-            nativeQuery = true)
-    int updateCommentContentIdByCommentId(@Param("contentId") Long contentId,
-                                           @Param("commentId") Long commentId);
+//    @Modifying
+//    @Query(value = "UPDATE comment SET comment_content_id = :contentId WHERE comment_id = :commentId",
+//            nativeQuery = true)
+//    int updateCommentContentIdByCommentId(@Param("contentId") Long contentId,
+//                                           @Param("commentId") Long commentId);
 }

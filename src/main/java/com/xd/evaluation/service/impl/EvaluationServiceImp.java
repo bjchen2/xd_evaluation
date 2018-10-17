@@ -33,7 +33,10 @@ public class EvaluationServiceImp implements EvaluationService {
                 userLikeRepository.findByLikeTypeAndObjIdAndUserId(10, evaId, userId);
         if(null == likeTemp) {  // 没有这样的记录，所以需要添加
             likeTemp = new UserLike();
-            likeTemp.setIsLike(true);
+
+            if(isLike) likeTemp.setIsLike(true);    // 如果用户点的是赞同，就设为1
+            else likeTemp.setIsLike(false);
+
             likeTemp.setLikeType(10);
             likeTemp.setObjId(evaId);
             likeTemp.setUserId(userId);
@@ -62,5 +65,13 @@ public class EvaluationServiceImp implements EvaluationService {
 
     @Override
     public void cancelLikeEvaluation(Long userId, Long evaId, Boolean isLike) throws Exception {
+        userLikeRepository.deleteByLikeTypeAndObjIdAndUserId(10, evaId, userId);
+
+        // 还要修改evaluation表里的 赞数/反对数
+        if(isLike) {    // 假如取消的是点赞，那么就要对agree_count减1
+            evaluationRepository.updateAgreeCountByEvaluationId(evaId, -1);
+        } else {
+            evaluationRepository.updateDisagreeCountByEvaluationId(evaId, -1);
+        }
     }
 }

@@ -8,7 +8,6 @@ import com.xd.evaluation.domain.CommentContent;
 import com.xd.evaluation.domain.UserLike;
 import com.xd.evaluation.dto.CommentInfo;
 import com.xd.evaluation.service.CommentService;
-import com.xd.evaluation.utils.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,11 +81,6 @@ public class CommentServiceImp implements CommentService {
         commentContent.setCommentId(resComment.getCommentId());    // save操作后会把插入的id返回到res
         commentContent.setCommentContent(content);
 
-        CommentContent resContent = commentContentRepository.save(commentContent);
-
-        // 把resContent中的id更新到comment表中
-        commentRepository
-                .updateCommentContentIdByCommentId(resContent.getCommentContentId(),
-                                                resComment.getCommentId());
+        commentContentRepository.save(commentContent);
     }
 }

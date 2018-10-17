@@ -5,11 +5,11 @@ import com.xd.evaluation.domain.EvaluationContent;
 public interface EvaluationContentMapper {
     int deleteByPrimaryKey(Long evaluationContentId);
 
-    int insert(EvaluationContent record);
+    int insert(EvaluationContent evaluationContent);
 
     EvaluationContent selectByPrimaryKey(Long evaluationContentId);
 
-    int updateByPrimaryKey(EvaluationContent record);
+    int updateByPrimaryKey(EvaluationContent evaluationContent);
 
 
 }

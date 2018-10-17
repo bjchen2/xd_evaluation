@@ -5,9 +5,9 @@ import com.xd.evaluation.domain.Evaluation;
 public interface EvaluationMapper {
     int deleteByPrimaryKey(Long evaluationId);
 
-    int insert(Evaluation record);
+    int insert(Evaluation evaluation);
 
     Evaluation selectByPrimaryKey(Long evaluationId);
 
-    int updateByPrimaryKey(Evaluation record);
+    int updateByPrimaryKey(Evaluation evaluation);
 }

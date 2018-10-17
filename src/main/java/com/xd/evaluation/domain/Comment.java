@@ -28,9 +28,6 @@ public class Comment {
     //评价id
     private Long evaluationId;
 
-    //评论内容id
-    private Long commentContentId;
-
     //赞同人数
     private Integer agreeCount;
 

@@ -25,9 +25,6 @@ public class Evaluation {
     //评价人id
     private Long userId;
 
-    //评价内容id
-    private Long evaluationContentId;
-
     //教师姓名
     private String teacherName;
 

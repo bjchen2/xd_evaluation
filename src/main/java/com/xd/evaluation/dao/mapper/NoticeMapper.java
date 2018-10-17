@@ -5,9 +5,9 @@ import com.xd.evaluation.domain.Notice;
 public interface NoticeMapper {
     int deleteByPrimaryKey(Long noticeId);
 
-    int insert(Notice record);
+    int insert(Notice notice);
 
     Notice selectByPrimaryKey(Long noticeId);
 
-    int updateByPrimaryKey(Notice record);
+    int updateByPrimaryKey(Notice notice);
 }

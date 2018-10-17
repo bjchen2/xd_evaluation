@@ -69,7 +69,6 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-
     public void addComment(Long userId, Long evaluationId, String content) throws Exception {
         Comment comment = new Comment();
         comment.setUserId(userId);

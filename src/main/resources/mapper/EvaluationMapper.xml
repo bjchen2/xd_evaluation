@@ -5,7 +5,6 @@
     <constructor>
       <idArg column="evaluation_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="evaluation_text_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="teacher_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="course_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="course_type" javaType="java.lang.Integer" jdbcType="TINYINT" />
@@ -18,7 +17,7 @@
   </resultMap>
 
   <sql id="Base_Column">
-    evaluation_id, user_id, evaluation_text_id, teacher_name, course_name, course_type, 
+    evaluation_id, user_id, teacher_name, course_name, course_type,
     is_recommended, agree_count, disagree_count, create_time, update_time
   </sql>
 
@@ -39,9 +38,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
         user_id,
-      </if>
-      <if test="evaluationContentId != null">
-        evaluation_text_id,
       </if>
       <if test="teacherName != null">
         teacher_name,
@@ -67,9 +63,6 @@
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="evaluationContentId != null">
-        #{evaluationContentId,jdbcType=BIGINT},
-      </if>
       <if test="teacherName != null">
         #{teacherName,jdbcType=VARCHAR},
       </if>
@@ -94,9 +87,6 @@
   <update id="updateByPrimaryKey">
     update evaluation
     <set>
-      <if test="evaluationContentId != null">
-        evaluation_text_id = #{evaluationContentId,jdbcType=BIGINT},
-      </if>
       <if test="teacherName != null">
         teacher_name = #{teacherName,jdbcType=VARCHAR},
       </if>

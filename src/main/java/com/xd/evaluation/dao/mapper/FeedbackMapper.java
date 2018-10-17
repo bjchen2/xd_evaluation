@@ -5,9 +5,9 @@ import com.xd.evaluation.domain.Feedback;
 public interface FeedbackMapper {
     int deleteByPrimaryKey(Long feedbackId);
 
-    int insert(Feedback record);
+    int insert(Feedback feedback);
 
     Feedback selectByPrimaryKey(Long feedbackId);
 
-    int updateByPrimaryKey(Feedback record);
+    int updateByPrimaryKey(Feedback feedback);
 }

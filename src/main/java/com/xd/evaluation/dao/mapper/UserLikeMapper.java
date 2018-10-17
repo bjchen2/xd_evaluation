@@ -5,9 +5,9 @@ import com.xd.evaluation.domain.UserLike;
 public interface UserLikeMapper {
     int deleteByPrimaryKey(Long likeId);
 
-    int insert(UserLike record);
+    int insert(UserLike userLike);
 
     UserLike selectByPrimaryKey(Long likeId);
 
-    int updateByPrimaryKey(UserLike record);
+    int updateByPrimaryKey(UserLike userLike);
 }

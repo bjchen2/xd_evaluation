@@ -5,9 +5,9 @@ import com.xd.evaluation.domain.Comment;
 public interface CommentMapper {
     int deleteByPrimaryKey(Long commentId);
 
-    int insert(Comment record);
+    int insert(Comment comment);
 
     Comment selectByPrimaryKey(Long commentId);
 
-    int updateByPrimaryKey(Comment record);
+    int updateByPrimaryKey(Comment comment);
 }

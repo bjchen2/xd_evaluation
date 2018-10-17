@@ -6,7 +6,6 @@
       <idArg column="comment_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="evaluation_id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="comment_content_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="agree_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="disagree_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -15,7 +14,7 @@
   </resultMap>
 
   <sql id="Base_Column">
-    comment_id, user_id, evaluation_id, comment_content_id, agree_count, disagree_count, 
+    comment_id, user_id, evaluation_id, agree_count, disagree_count,
     create_time, update_time
   </sql>
 
@@ -40,9 +39,6 @@
       <if test="evaluationId != null">
         evaluation_id,
       </if>
-      <if test="commentContentId != null">
-        comment_content_id,
-      </if>
       <if test="agreeCount != null">
         agree_count,
       </if>
@@ -56,9 +52,6 @@
       </if>
       <if test="evaluationId != null">
         #{evaluationId,jdbcType=BIGINT},
-      </if>
-      <if test="commentContentId != null">
-        #{commentContentId,jdbcType=BIGINT},
       </if>
       <if test="agreeCount != null">
         #{agreeCount,jdbcType=INTEGER},
@@ -74,9 +67,6 @@
     <set>
       <if test="evaluationId != null">
         evaluation_id = #{evaluationId,jdbcType=BIGINT},
-      </if>
-      <if test="commentContentId != null">
-        comment_content_id = #{commentContentId,jdbcType=BIGINT},
       </if>
       <if test="agreeCount != null">
         agree_count = #{agreeCount,jdbcType=INTEGER},

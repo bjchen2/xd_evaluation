@@ -83,4 +83,53 @@ public class CommentServiceImp implements CommentService {
 
         commentContentRepository.save(commentContent);
     }
+
+    @Override
+    public void likeComment(Long userId, Long commentId, Boolean isLike) throws Exception {
+        // 先查询数据库是否存在记录
+        UserLike likeTemp =
+                userLikeRepository.findByLikeTypeAndObjIdAndUserId(11, commentId, userId);
+        if(null == likeTemp) {  // 没有这样的记录，所以需要添加
+            likeTemp = new UserLike();
+
+            if(isLike) likeTemp.setIsLike(true);    // 如果用户点的是赞同，就设为1
+            else likeTemp.setIsLike(false);
+
+            likeTemp.setLikeType(11);
+            likeTemp.setObjId(commentId);
+            likeTemp.setUserId(userId);
+            // 创建这样一条记录
+            userLikeRepository.save(likeTemp);
+
+            // 同时还要更新evaluation表里的agree_count/disagree_count
+            if(isLike) {    // 不能写在外面，因为从反对改为点赞和null改为点赞操作不一样
+                // 只需要增加一个点赞数即可
+                commentRepository.updateAgreeCountByCommentId(commentId, 1);
+            } else {
+                commentRepository.updateDisagreeCountByCommentId(commentId, 1);
+            }
+        } else {    // 如果存在记录，则只需要修改即可
+            userLikeRepository.
+                    updateIsLikeByLikeTypeAndObjIdAndUserId(11, commentId, userId, isLike);
+            if(isLike) {    // 说明用户之前点的是反对，所以要把反对取消，再给点赞+1
+                commentRepository.updateDisagreeCountByCommentId(commentId, -1);
+                commentRepository.updateAgreeCountByCommentId(commentId, 1);
+            } else {
+                commentRepository.updateAgreeCountByCommentId(commentId, -1);
+                commentRepository.updateDisagreeCountByCommentId(commentId, 1);
+            }
+        }
+    }
+
+    @Override
+    public void cancelLikeComment(Long userId, Long commentId, Boolean isLike) throws Exception {
+        userLikeRepository.deleteByLikeTypeAndObjIdAndUserId(11, commentId, userId);
+
+        // 还要修改evaluation表里的 赞数/反对数
+        if(isLike) {    // 假如取消的是点赞，那么就要对agree_count减1
+            commentRepository.updateAgreeCountByCommentId(commentId, -1);
+        } else {
+            commentRepository.updateDisagreeCountByCommentId(commentId, -1);
+        }
+    }
 }

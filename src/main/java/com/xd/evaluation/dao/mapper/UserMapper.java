@@ -9,5 +9,8 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Long userId);
 
+    /**
+     * 仅可修改用户名和用户头像URL
+     */
     int updateByPrimaryKey(User user);
 }

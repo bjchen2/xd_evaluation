@@ -14,8 +14,18 @@ public interface UserService {
     User save(User user);
 
     /**
-     * 查询某个用户
+     * 通过openid查询某个用户
      */
     User findByOpenid(String openId);
+
+    /**
+     * 通过userId查询某个用户 ， 如果不存在，返回null
+     */
+    User findByUserId(Long userId);
+
+    /**
+     * 根据用户Id修改用户对象的非空信息
+     */
+    void updateUserByUserId(User user);
 
 }

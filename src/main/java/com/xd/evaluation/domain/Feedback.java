@@ -1,5 +1,6 @@
 package com.xd.evaluation.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -32,8 +33,10 @@ public class Feedback {
     private String content;
 
     //创建时间
+    @JsonIgnore
     private Date createTime;
 
     //最近更新时间
+    @JsonIgnore
     private Date updateTime;
 }

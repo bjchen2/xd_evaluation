@@ -85,8 +85,8 @@ public class CommentServiceImp implements CommentService {
         CommentContent resContent = commentContentRepository.save(commentContent);
 
         // 把resContent中的id更新到comment表中
-        commentRepository
-                .updateCommentContentIdByCommentId(resContent.getCommentContentId(),
-                                                resComment.getCommentId());
+//        commentRepository
+//                .updateCommentContentIdByCommentId(resContent.getCommentContentId(),
+//                                                resComment.getCommentId());
     }
 }

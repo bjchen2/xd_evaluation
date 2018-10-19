@@ -9,6 +9,7 @@ import com.xd.evaluation.domain.User;
 import com.xd.evaluation.dto.WxInfo;
 import com.xd.evaluation.service.UserService;
 import com.xd.evaluation.utils.ResultUtil;
+import com.xd.evaluation.utils.UniqueKeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,7 @@ public class WxController {
             if (user == null) {
                 //若用户第一次登录,获取并存储用户信息
                 WxMaUserInfo wxUserInfo = wxService.getUserService().getUserInfo(session.getSessionKey(), wxInfo.getEncryptedData(), wxInfo.getIv());
-                user = userService.save(new User(wxUserInfo.getNickName(), wxUserInfo.getOpenId(), wxUserInfo.getAvatarUrl()));
+                user = userService.save(new User(UniqueKeyUtil.genUniqueKey(), wxUserInfo.getOpenId(), wxUserInfo.getAvatarUrl()));
             }
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);

@@ -30,4 +30,20 @@ public interface CommentService {
      * @throws Exception
      */
     void addComment(Long userId, Long evaluationId, String content) throws Exception;
+
+    /**
+     * 点赞/反对 一条评论
+     * @param userId 点赞人id
+     * @param commentId 点赞的评价id
+     * @param isLike 是否赞同 true：是
+     * @throws Exception
+     */
+    void likeComment(Long userId, Long commentId, Boolean isLike) throws Exception;
+
+    /**
+     * 删除一条 点赞/反对 评论信息
+     * @param isLike true：要删除的是点赞信息
+     * @throws Exception
+     */
+    void cancelLikeComment(Long userId, Long commentId, Boolean isLike) throws Exception;
 }

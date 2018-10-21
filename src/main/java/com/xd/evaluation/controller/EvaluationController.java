@@ -1,16 +1,16 @@
 package com.xd.evaluation.controller;
 
 import com.xd.evaluation.VO.ResultVO;
+import com.xd.evaluation.dto.EvaluationInfo;
 import com.xd.evaluation.service.CommentService;
 import com.xd.evaluation.service.EvaluationService;
 import com.xd.evaluation.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Description: 进行评价有关的操作（注：评论的点赞操作也在这里）
@@ -81,4 +81,57 @@ public class EvaluationController {
             return ResultUtil.error("likeType非法值");
         }
     }
+
+    /**
+     * 获取全部评价
+     * @param userId 进行查询的用户id
+     * @param sort 排序方式：0（默认）：按最新排序，1：按点赞量排序
+     * @param key 搜索关键字，可以为空
+     * @param type 类别：0（默认）：全部，10：校选修 11：必修 12：实验
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("all/{userId}")
+    public ResultVO returnAllEvaluationInSort(@PathVariable Long userId,
+                                              Integer sort, String key, Integer type)
+            throws Exception {
+        LOGGER.info("用户" + userId + "将要查询全部评价，关键词key为" + key);
+        // TODO: 可以加上校验
+        if(!(null == key || "".equals(key))) key = "%" + key + "%"; // 如果key不为空
+
+        List<EvaluationInfo> infos =
+                evaluationService.returnAllEvaluationOrder(userId, key, type, sort);
+        return ResultUtil.success(infos);
+    }
+
+    /**
+     * 添加评价
+     * @param isRecommended true: 推荐
+     * @throws Exception
+     */
+    @PostMapping("")
+    public ResultVO addEvaluation(Long userId, String evaluationContent, String teacherName,
+                              String courseName, Integer courseType, Boolean isRecommended)
+            throws Exception {
+        LOGGER.info("用户" + userId + "将添加一条评价");
+        evaluationService.addEvaluation(userId, evaluationContent, teacherName,
+                                    courseName, courseType, isRecommended);
+        return ResultUtil.success();
+    }
+
+    /**
+     * 查询某用户创建的所有评价
+     * 注：返回对象依然使用EvaluationInfo，所以会有一些冗余字段，默认置空
+     * @param userId
+     * @return 注意，当查询不到数据时，返回的List并不为空，而是size == 0
+     * @throws Exception
+     */
+    @GetMapping("/{userId}")
+    public ResultVO returnUserAllEvaluation(@PathVariable Long userId) throws Exception {
+        LOGGER.info("请求查询用户" + userId + "创建的全部评价");
+        List<EvaluationInfo> infos = evaluationService.returnUserAllEvaluation(userId);
+        
+        return ResultUtil.success(infos);
+    }
+
 }

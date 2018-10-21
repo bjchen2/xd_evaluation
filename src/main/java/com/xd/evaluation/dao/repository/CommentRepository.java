@@ -31,4 +31,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             nativeQuery = true)
     void updateDisagreeCountByCommentId(@Param("commentId") Long commentId,
                                            @Param("change") Integer change);
+
+    Integer countByEvaluationId(Long evaluationId);
 }

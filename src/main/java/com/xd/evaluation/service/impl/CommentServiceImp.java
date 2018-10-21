@@ -62,6 +62,7 @@ public class CommentServiceImp implements CommentService {
                 commentInfo.setIsLike(userLike.getIsLike());
             }
             BeanUtils.copyProperties(comment, commentInfo);
+            commentInfo.setCreateTime(comment.getCreateTime().getTime());
             comments.add(commentInfo);
         }
         return comments;

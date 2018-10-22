@@ -1,13 +1,25 @@
 package com.xd.evaluation.service.impl;
 
-import com.xd.evaluation.dao.repository.EvaluationRepository;
-import com.xd.evaluation.dao.repository.UserLikeRepository;
+import com.xd.evaluation.dao.repository.*;
+import com.xd.evaluation.domain.Evaluation;
+import com.xd.evaluation.domain.EvaluationContent;
+import com.xd.evaluation.domain.Favorite;
 import com.xd.evaluation.domain.UserLike;
+import com.xd.evaluation.dto.EvaluationInfo;
+import com.xd.evaluation.enums.CourseTypeEnum;
 import com.xd.evaluation.service.EvaluationService;
+import com.xd.evaluation.utils.EntityUtil;
+import com.xd.evaluation.utils.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Description:
@@ -24,7 +36,16 @@ public class EvaluationServiceImp implements EvaluationService {
     private EvaluationRepository evaluationRepository;
 
     @Autowired
+    private EvaluationContentRepository evaluationContentRepository;
+
+    @Autowired
     private UserLikeRepository userLikeRepository;
+
+    @Autowired
+    private FavoritesRepository favoritesRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     public void likeEvaluation(Long userId, Long evaId, Boolean isLike) throws Exception {
@@ -74,4 +95,119 @@ public class EvaluationServiceImp implements EvaluationService {
             evaluationRepository.updateDisagreeCountByEvaluationId(evaId, -1);
         }
     }
+
+    @Override
+    public List<EvaluationInfo> returnAllEvaluationOrder(
+            Long userId, String key, Integer type, Integer sortType) throws Exception {
+        // 先查询基础的数据
+        List<Object[]> metaList;
+        if(null == key || "".equals(key)) { // 不使用关键词
+            // 当0 == type时，第一个参数为true，则不限定type搜索
+            if(0 == sortType) {
+                metaList = evaluationRepository
+                        .findEvaluationMetaInfoOrderByCreateTime((0 == type), type);
+            } else {
+                metaList = evaluationRepository
+                        .findEvaluationMetaInfoOrderByAgreeCount((0 == type), type);
+            }
+        } else {    // 关键词搜索
+           if(0 == sortType) {
+               metaList = evaluationRepository
+                       .findEvaluationMetaInfoWithKeyWordOrderByCreateTime((0 == type), type, key);
+           } else {
+               metaList = evaluationRepository
+                       .findEvaluationMetaInfoWithKeyWordOrderByAgreeCount((0 == type), type, key);
+           }
+        }
+
+        // 对一些原始数据进行二次处理
+        for (Object[] obj: metaList) {
+            obj[0] = ((BigInteger)obj[0]).longValue();
+            obj[1] = ((BigInteger)obj[1]).longValue();
+
+            // 课程类型
+            CourseTypeEnum courseTypeEnum =
+                    EnumUtil.getByCode(Byte.toUnsignedInt((Byte)obj[5]), CourseTypeEnum.class);
+            String msg = null;
+            if(null != courseTypeEnum) msg = courseTypeEnum.getMsg();
+            obj[5] = msg;
+
+            // 是否推荐
+            obj[6] = (Boolean)((Byte)obj[6] == 1);
+            // 时间戳
+            obj[9] = ((Date)obj[9]).getTime();
+        }
+
+        /* 把对象数组集合转化为DTO对象集合 */
+        EvaluationInfo temp =    // 这是为了控制传入参数的临时对象
+                new EvaluationInfo(1L, 1L, "111",
+                        "111", "111", "111",
+                        false, 1, 1, 1L);
+        List<EvaluationInfo> evaList =
+                EntityUtil.castEntity(metaList, EvaluationInfo.class, temp);
+
+        /* 进行额外信息的查询和设置 */
+        for (EvaluationInfo info : evaList) {
+            // 查询用户是否给评价点赞
+            UserLike likeObj =
+                    userLikeRepository.findByLikeTypeAndObjIdAndUserId
+                            (10, info.getEvaluationId(), userId);
+            if(null != likeObj) info.setIsLike(likeObj.getIsLike());
+
+            // 查询用户是否收藏该课
+            Favorite favObj = favoritesRepository
+                    .findByEvaluationIdAndUserId(info.getEvaluationId(), info.getUserId());
+            info.setIsFavorited(null == favObj);
+
+            // 查询评论数量
+            Integer commentCount = commentRepository.countByEvaluationId(info.getEvaluationId());
+            info.setCommentCount(commentCount);
+        }
+
+        return evaList;
+    }
+
+    @Override
+    public void addEvaluation(Long userId, String content, String teacherName, String courseName,
+                              Integer courseType, Boolean isRecommended) throws Exception {
+        Evaluation eva = new Evaluation();
+        eva.setUserId(userId);
+        eva.setTeacherName(teacherName);
+        eva.setCourseName(courseName);
+        eva.setCourseType(courseType);
+        eva.setIsRecommended(isRecommended);
+        eva.setAgreeCount(0);
+        eva.setDisagreeCount(0);
+
+        Evaluation temp = evaluationRepository.save(eva);   // 从返回值中获取id
+
+        EvaluationContent evaContent = new EvaluationContent();
+        evaContent.setEvaluationId(temp.getEvaluationId());
+        evaContent.setEvaluationContent(content);
+
+        evaluationContentRepository.save(evaContent);
+    }
+
+    @Override
+    public List<EvaluationInfo> returnUserAllEvaluation(Long userId) throws Exception {
+        List<EvaluationInfo> infos = new ArrayList<>();
+
+        List<Evaluation> evaList = evaluationRepository.findAllByUserId(userId);
+        for(Evaluation eva: evaList) {
+            EvaluationInfo info = new EvaluationInfo();
+            BeanUtils.copyProperties(eva, info);    // eva -> info
+            EvaluationContent evaContent
+                    = evaluationContentRepository.findByEvaluationId(info.getEvaluationId());
+            info.setEvaluationContent(evaContent.getEvaluationContent());
+
+            Favorite fav =  // 查询是否收藏
+                    favoritesRepository.findByEvaluationIdAndUserId(info.getEvaluationId(), userId);
+            info.setIsFavorited(null != fav);
+
+            infos.add(info);
+        }
+        return infos;
+    }
+
+
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 public class CommentInfo {
 
-    // 评论id
+    //评论id
     private Long commentId;
 
     //评论人id
@@ -32,9 +32,9 @@ public class CommentInfo {
     //反对人数
     private Integer disagreeCount;
 
-    // 是否点赞了
+    //是否点赞了
     private Boolean isLike;
 
     //创建时间
-    private Date createTime;
+    private Long createTime;
 }

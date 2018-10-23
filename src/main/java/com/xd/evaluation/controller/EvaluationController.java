@@ -130,8 +130,53 @@ public class EvaluationController {
     public ResultVO returnUserAllEvaluation(@PathVariable Long userId) throws Exception {
         LOGGER.info("请求查询用户" + userId + "创建的全部评价");
         List<EvaluationInfo> infos = evaluationService.returnUserAllEvaluation(userId);
-        
+
         return ResultUtil.success(infos);
+    }
+
+    /**
+     * 返回用户收藏的所有评价
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/favorite/{userId}")
+    public ResultVO returnUserFavorite(@PathVariable Long userId) throws Exception {
+        LOGGER.info("用户" + userId + "请求查询收藏评价");
+        List<EvaluationInfo> favList = evaluationService.returnUserFavorite(userId);
+        return ResultUtil.success(favList);
+    }
+
+    /**
+     * 通过id删除一条评价
+     */
+    @DeleteMapping("/{evaluationId}")
+    public ResultVO deleteEvaluation(@PathVariable Long evaluationId) throws Exception {
+        LOGGER.info("请求删除评价" + evaluationId);
+        evaluationService.deleteEvaluationById(evaluationId);
+        return ResultUtil.success();
+    }
+
+    /**
+     * 收藏一条评价
+     */
+    @PostMapping("/favorite/{evaluationId}/{userId}")
+    public ResultVO favoriteEvaluation(@PathVariable Long evaluationId, @PathVariable Long userId)
+            throws Exception {
+        LOGGER.info("用户" + userId + "请求收藏评价" + evaluationId);
+        evaluationService.favoriteEvaluation(evaluationId, userId);
+        return ResultUtil.success();
+    }
+
+    /**
+     * 取消一条收藏的评价
+     */
+    @DeleteMapping("/favorite/{evaluationId}/{userId}")
+    public ResultVO cancelEvaluationFavorite(@PathVariable Long evaluationId,
+                                             @PathVariable Long userId) throws Exception {
+        LOGGER.info("用户" + userId + "取消收藏评价" + evaluationId);
+        evaluationService.cancelFavorite(evaluationId, userId);
+        return ResultUtil.success();
     }
 
 }

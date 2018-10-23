@@ -95,4 +95,17 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
                                                 @Param("courseType") Integer courseType,
                                                 @Param("keyword") String key);
 
+    /**
+     * 查询用户所有收藏的评价
+     * @param userId 进行查询的用户
+     * @return
+     */
+    @Query(value = "SELECT a.evaluation_id, a.user_id, c.evaluation_content, " +
+            "a.teacher_name, a.course_name, a.course_type, a.is_recommended, " +
+            "a.agree_count, a.disagree_count, a.create_time " +
+            "FROM evaluation a, favorite b, evaluation_content c " +
+            "WHERE a.evaluation_id = b.evaluation_id " +
+            "AND b.user_id = :userId AND a.evaluation_id = c.evaluation_id",
+            nativeQuery = true)
+    List<Object[]> findFavoriteByUserId(@Param("userId")Long userId);
 }

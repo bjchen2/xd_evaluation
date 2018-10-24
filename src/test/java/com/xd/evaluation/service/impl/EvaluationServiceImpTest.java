@@ -70,4 +70,21 @@ public class EvaluationServiceImpTest {
         evaluationService.returnUserAllEvaluation(12L);
     }
 
+    // 通过
+    @Test
+    public void returnUserFavorite() throws Exception {
+        evaluationService.returnUserFavorite(5L);
+    }
+
+
+    /**
+     * 测试删除评价、添加收藏和取消收藏三个方法
+     */
+    @Test
+    public void testDeleteAndAddFunction() throws Exception {
+        evaluationService.deleteEvaluationById(21L);
+        evaluationService.cancelFavorite(21L, 5L);
+        evaluationService.favoriteEvaluation(23L, 7L);
+    }
+
 }

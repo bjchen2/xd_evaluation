@@ -1,5 +1,6 @@
 package com.xd.evaluation.utils;
 
+import com.xd.evaluation.enums.CourseTypeEnum;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.*;
 
 /**
  * @Description: 把对象集合转化为自定义的实体数据集合
@@ -103,6 +102,28 @@ public class EntityUtil {
             list.add(infoMap);
         }
         return list;
+    }
+
+    /**
+     * 对EvaluationInfo的数据进行二次处理，使得可以通过反射创建对象
+     */
+    public static void processObjectListToEvalutionInfo(List<Object[]> metaList) {
+        for (Object[] obj: metaList) {
+            obj[0] = ((BigInteger)obj[0]).longValue();
+            obj[1] = ((BigInteger)obj[1]).longValue();
+
+            // 课程类型
+            CourseTypeEnum courseTypeEnum =
+                    EnumUtil.getByCode(Byte.toUnsignedInt((Byte)obj[5]), CourseTypeEnum.class);
+            String msg = null;
+            if(null != courseTypeEnum) msg = courseTypeEnum.getMsg();
+            obj[5] = msg;
+
+            // 是否推荐
+            obj[6] = (Boolean)((Byte)obj[6] == 1);
+            // 时间戳
+            obj[9] = ((Date)obj[9]).getTime();
+        }
     }
 
 }

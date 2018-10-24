@@ -121,22 +121,7 @@ public class EvaluationServiceImp implements EvaluationService {
         }
 
         // 对一些原始数据进行二次处理
-        for (Object[] obj: metaList) {
-            obj[0] = ((BigInteger)obj[0]).longValue();
-            obj[1] = ((BigInteger)obj[1]).longValue();
-
-            // 课程类型
-            CourseTypeEnum courseTypeEnum =
-                    EnumUtil.getByCode(Byte.toUnsignedInt((Byte)obj[5]), CourseTypeEnum.class);
-            String msg = null;
-            if(null != courseTypeEnum) msg = courseTypeEnum.getMsg();
-            obj[5] = msg;
-
-            // 是否推荐
-            obj[6] = (Boolean)((Byte)obj[6] == 1);
-            // 时间戳
-            obj[9] = ((Date)obj[9]).getTime();
-        }
+        EntityUtil.processObjectListToEvalutionInfo(metaList);
 
         /* 把对象数组集合转化为DTO对象集合 */
         EvaluationInfo temp =    // 这是为了控制传入参数的临时对象
@@ -207,6 +192,41 @@ public class EvaluationServiceImp implements EvaluationService {
             infos.add(info);
         }
         return infos;
+    }
+
+    @Override
+    public List<EvaluationInfo> returnUserFavorite(Long userId) throws Exception {
+        List<Object[]> metaList = evaluationRepository.findFavoriteByUserId(userId);
+
+        if(null == metaList || metaList.isEmpty()) return null;   // 查询不到就直接返回
+
+        // 对一些原始数据进行二次处理
+        EntityUtil.processObjectListToEvalutionInfo(metaList);
+        /* 把对象数组集合转化为DTO对象集合 */
+        EvaluationInfo temp =    // 这是为了控制传入参数的临时对象
+                new EvaluationInfo(1L, 1L, "111",
+                        "111", "111", "111",
+                        false, 1, 1, 1L);
+        return EntityUtil.castEntity(metaList, EvaluationInfo.class, temp);
+    }
+
+    @Override
+    public void deleteEvaluationById(Long evaluationId) throws Exception {
+        evaluationRepository.deleteById(evaluationId);
+    }
+
+    @Override
+    public void favoriteEvaluation(Long evaluationId, Long userId) throws Exception {
+        Favorite record = new Favorite();
+        record.setUserId(userId);
+        record.setEvaluationId(evaluationId);
+
+        favoritesRepository.save(record);
+    }
+
+    @Override
+    public void cancelFavorite(Long evaluationId, Long userId) throws Exception {
+        favoritesRepository.deleteByEvaluationIdAndUserId(evaluationId, userId);
     }
 
 

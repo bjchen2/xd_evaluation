@@ -56,4 +56,31 @@ public interface EvaluationService {
      * @throws Exception
      */
     List<EvaluationInfo> returnUserAllEvaluation(Long userId) throws Exception;
+
+    /**
+     * 返回用户收藏的评价
+     */
+    List<EvaluationInfo> returnUserFavorite(Long userId) throws Exception;
+
+    /**
+     * 通过evaluation_id删除一条评价
+     * 注：为了以后的扩展，可以给用户显示自己评论或收藏的评价被删除，
+     *     所以不删除comment和favorite的表中的相关数据
+     * @throws Exception
+     */
+    void deleteEvaluationById(Long evaluationId) throws Exception;
+
+    /**
+     * 收藏一条评价
+     * @param evaluationId 收藏的评价id
+     * @param userId 收藏用户的id
+     * @throws Exception
+     */
+    void favoriteEvaluation(Long evaluationId, Long userId) throws Exception;
+
+    /**
+     * 取消一条评价的收藏
+     * @throws Exception
+     */
+    void cancelFavorite(Long evaluationId, Long userId) throws Exception;
 }

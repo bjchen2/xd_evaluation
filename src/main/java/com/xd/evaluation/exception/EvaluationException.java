@@ -9,21 +9,21 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class EvaluaionException extends RuntimeException{
+public class EvaluationException extends RuntimeException{
     //错误码
     private Integer code;
 
-    public EvaluaionException(ResultEnum resultEnum) {
+    public EvaluationException(ResultEnum resultEnum) {
         super(resultEnum.getMsg());
         this.code = resultEnum.getCode();
     }
 
-    public EvaluaionException(String message, Integer code) {
+    public EvaluationException(String message, Integer code) {
         super(message);
         this.code = code;
     }
 
-    public EvaluaionException(String message) {
+    public EvaluationException(String message) {
         super(message);
         this.code = ResultEnum.ERROR.getCode();
     }

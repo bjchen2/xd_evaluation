@@ -22,8 +22,4 @@ public class WeChatAccountConfig {
      */
     private String secret;
 
-    /**
-     * 数据格式
-     */
-    private String msgDataFormat;
 }

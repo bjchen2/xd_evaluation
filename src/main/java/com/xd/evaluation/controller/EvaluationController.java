@@ -91,7 +91,7 @@ public class EvaluationController {
      * @return
      * @throws Exception
      */
-    @GetMapping("all/{userId}")
+    @GetMapping("/all/{userId}")
     public ResultVO returnAllEvaluationInSort(@PathVariable Long userId,
                                               Integer sort, String key, Integer type)
             throws Exception {

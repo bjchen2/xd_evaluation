@@ -34,8 +34,6 @@ public class CommentController {
      * 获取某评价下的所有评论
      * @param evaluationId 评价id
      * @param userId 当前登陆用户id
-     * @return
-     * @throws Exception
      */
     @RequestMapping(value = "/{evaluationId}/{userId}", method = RequestMethod.GET)
     public ResultVO returnAllComment(@PathVariable Long evaluationId, @PathVariable Long userId)
@@ -55,8 +53,6 @@ public class CommentController {
      * @param userId 评论人id
      * @param evaluationId 评论的评价id
      * @param commentContent 评论内容
-     * @return
-     * @throws Exception
      */
     @PostMapping("")
     public ResultVO addOneComment(@RequestBody Long userId,@RequestBody Long evaluationId,

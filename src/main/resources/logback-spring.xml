@@ -33,7 +33,7 @@
         <!--滚动策略,使其每天产生一个日志文件-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>var/log/tomcat/evaluation/info.%d.log</fileNamePattern>
+            <fileNamePattern>log/info.%d.log</fileNamePattern>
             <!--最大存储时间，单位：天-->
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -57,7 +57,7 @@
         <!--滚动策略,使其每天产生一个日志文件-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>var/log/tomcat/evaluation/error.%d.log</fileNamePattern>
+            <fileNamePattern>log/error.%d.log</fileNamePattern>
             <!--最大存储时间，单位：天-->
             <maxHistory>10</maxHistory>
         </rollingPolicy>
@@ -91,7 +91,7 @@
         <!--滚动策略,使其每天产生一个日志文件-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>var/log/tomcat/evaluation/warn.%d.log</fileNamePattern>
+            <fileNamePattern>log/warn.%d.log</fileNamePattern>
             <!--最大存储时间，单位：天-->
             <maxHistory>10</maxHistory>
         </rollingPolicy>

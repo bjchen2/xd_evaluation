@@ -2,6 +2,8 @@ package com.xd.evaluation.controller;
 
 import com.xd.evaluation.VO.ResultVO;
 import com.xd.evaluation.dto.EvaluationInfo;
+import com.xd.evaluation.pojo.EvaAddPojo;
+import com.xd.evaluation.pojo.EvaLikePojo;
 import com.xd.evaluation.service.CommentService;
 import com.xd.evaluation.service.EvaluationService;
 import com.xd.evaluation.utils.ResultUtil;
@@ -32,54 +34,56 @@ public class EvaluationController {
 
     /**
      * 给 评论/评价 点赞
-     * @param userId 点赞的用户
-     * @param objId 被点赞的 评论/评价 id
-     * @param isLike 是否赞同 true：赞同
-     * @param likeType 评价还是评价 10：评价 11：评论
-     * @return
      * @throws Exception
      */
     @PostMapping("/like")
-    public ResultVO likeEvaluation(Long userId, Long objId, Boolean isLike, Integer likeType)
-        throws Exception {
+    public ResultVO likeEvaluation(@RequestBody EvaLikePojo evaLike) throws Exception {
+        Integer likeType = evaLike.getLikeType();
+
         if(10 == likeType) {    // 进行评价的点赞操作
-            LOGGER.info("用户" + userId + "将进行评价" + objId + "的 点赞/反对 操作");
-            evaluationService.likeEvaluation(userId, objId, isLike);
-            return ResultUtil.success();
+            evaluationService.likeEvaluation(
+                    evaLike.getUserId(), evaLike.getObjId(), evaLike.getIsLike());
+
+            LOGGER.info("[点赞]用户{}对评价{}进行点赞/反对操作",
+                    evaLike.getUserId(), evaLike.getObjId());
         } else if(11 == likeType) {
-            LOGGER.info("用户" + userId + "将进行评论" + objId + "的 点赞/反对 操作");
-            commentService.likeComment(userId, objId, isLike);
-            return ResultUtil.success();
+            commentService.likeComment(
+                    evaLike.getUserId(), evaLike.getObjId(), evaLike.getIsLike());
+
+            LOGGER.info("[点赞]用户{}对评论{}进行点赞/反对操作",
+                    evaLike.getUserId(), evaLike.getObjId());
         } else {    // 异常值
-            LOGGER.error("likeType值不能为" + likeType);
+            LOGGER.error("[点赞]likeType值不能为{}", likeType);
             return ResultUtil.error("likeType非法值");
         }
+        return ResultUtil.success();
     }
 
     /**
      * 取消用户对 评价/评论 的点赞/反对 操作
-     * @param userId 进行操作的用户id
-     * @param objId 取消的 评价/评论 id
-     * @param isLike 取消的是 赞同/反对 true:赞同
-     * @param likeType 评价/评论 10：评价 | 11：评论
      * @return
      * @throws Exception
      */
     @DeleteMapping("/like")
-    public ResultVO cancelLike(Long userId, Long objId, Boolean isLike, Integer likeType)
-            throws Exception {
+    public ResultVO cancelLike(@RequestBody EvaLikePojo evaUnlike) throws Exception {
+        Integer likeType = evaUnlike.getLikeType();
         if(10 == likeType) {    // 取消评价的点赞
-            LOGGER.info("用户" + userId + "将要取消评价" + objId + "的点赞/反对");
-            evaluationService.cancelLikeEvaluation(userId, objId, isLike);
-            return ResultUtil.success();
+            evaluationService.cancelLikeEvaluation(
+                    evaUnlike.getUserId(), evaUnlike.getObjId(), evaUnlike.getIsLike());
+
+            LOGGER.info("[取消点赞]用户{}对评价{}取消点赞",
+                    evaUnlike.getUserId(), evaUnlike.getObjId());
         } else if(11 == likeType) { // 取消评论的点赞
-            LOGGER.info("用户" + userId + "将要取消评论" + objId + "的点赞/反对");
-            commentService.cancelLikeComment(userId, objId, isLike);
-            return ResultUtil.success();
+            commentService.cancelLikeComment(
+                    evaUnlike.getUserId(), evaUnlike.getObjId(), evaUnlike.getIsLike());
+
+            LOGGER.info("[取消点赞]用户{}对评论{}取消点赞",
+                    evaUnlike.getUserId(), evaUnlike.getObjId());
         } else {    // 异常值
-            LOGGER.error("likeType值不能为" + likeType);
+            LOGGER.error("[点赞]likeType值不能为{}", likeType);
             return ResultUtil.error("likeType非法值");
         }
+        return ResultUtil.success();
     }
 
     /**
@@ -108,16 +112,21 @@ public class EvaluationController {
 
     /**
      * 添加评价
-     * @param isRecommended true: 推荐
-     * @throws Exception
      */
     @PostMapping("")
-    public ResultVO addEvaluation(Long userId, String evaluationContent, String teacherName,
-                              String courseName, Integer courseType, Boolean isRecommended)
-            throws Exception {
-        LOGGER.info("用户" + userId + "将添加一条评价");
-        evaluationService.addEvaluation(userId, evaluationContent, teacherName,
-                                    courseName, courseType, isRecommended);
+    public ResultVO addEvaluation(@RequestBody EvaAddPojo evaAdd) throws Exception {
+        if(evaAdd == null || evaAdd.getUserId() == null) {
+            LOGGER.error("[添加评论]不合法的空对象");
+            return ResultUtil.error("请求参数为空或请求用户id为空");
+        }
+        evaluationService.addEvaluation(evaAdd.getUserId(),
+                                        evaAdd.getEvaluationContent(),
+                                        evaAdd.getTeacherName(),
+                                        evaAdd.getCourseName(),
+                                        evaAdd.getCourseType(),
+                                        evaAdd.getIsRecommended());
+
+        LOGGER.info("[添加评论]用户{}添加评论完毕", evaAdd.getUserId());
         return ResultUtil.success();
     }
 

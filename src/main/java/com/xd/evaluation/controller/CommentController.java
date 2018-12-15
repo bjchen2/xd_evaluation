@@ -3,6 +3,7 @@ package com.xd.evaluation.controller;
 
 import com.xd.evaluation.VO.ResultVO;
 import com.xd.evaluation.dto.CommentInfo;
+import com.xd.evaluation.pojo.ComAddPojo;
 import com.xd.evaluation.service.CommentService;
 import com.xd.evaluation.utils.ResultUtil;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 实现对评论的操作，包括添加评论，查询【评论
+ * 实现对评论的操作，包括添加评论，查询评论
  * Created By Cx On 2018/10/9 21:44
  */
 @RestController
@@ -50,20 +51,18 @@ public class CommentController {
 
     /**
      * 添加一条评论
-     * @param userId 评论人id
-     * @param evaluationId 评论的评价id
-     * @param commentContent 评论内容
      */
     @PostMapping("")
-    public ResultVO addOneComment(@RequestBody Long userId,@RequestBody Long evaluationId,
-                                  @RequestBody String commentContent) throws Exception {
-        LOGGER.info("用户 " + userId + " 请求添加一条评论");
-        if(null == evaluationId || null == userId) {    // 异常请求
-            LOGGER.error(request.getRemoteAddr() + ": 异常请求，id不能为空");
-            return ResultUtil.error("id不能为空");
+    public ResultVO addOneComment(@RequestBody ComAddPojo comAdd) throws Exception {
+        if(comAdd == null || comAdd.getEvaluationId() == null || comAdd.getUserId() == null) {
+            LOGGER.error("[添加评论]参数不合法");
+            return ResultUtil.error("参数不合法");
         }
-
-        commentService.addComment(userId, evaluationId, commentContent);
+        LOGGER.info("[添加评论]用户{}添加一条评论", comAdd.getUserId());
+        commentService.addComment(
+                        comAdd.getUserId(),
+                        comAdd.getEvaluationId(),
+                        comAdd.getCommentContent());
         return ResultUtil.success();
     }
 }

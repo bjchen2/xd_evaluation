@@ -27,7 +27,7 @@ public class FeedBackController {
     FeedbackService feedbackService;
 
     //创建反馈
-    @PostMapping("{userId}")
+    @PostMapping("/{userId}")
     public ResultVO create(@PathVariable Long userId, @Valid @RequestBody FeedbackForm feedbackForm, BindingResult bindingResult){
         //验证反馈参数是否正确
         if (bindingResult.hasErrors()){

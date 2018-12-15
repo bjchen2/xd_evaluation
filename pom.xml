@@ -96,6 +96,7 @@
     </dependencies>
 
     <build>
+        <finalName>xdEvaluation</finalName>
         <plugins>
             <!--mybaits插件，根据数据库自动生成pojo、dao、xml-->
             <plugin>

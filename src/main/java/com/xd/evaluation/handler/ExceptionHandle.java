@@ -1,7 +1,7 @@
 package com.xd.evaluation.handler;
 
 import com.xd.evaluation.VO.ResultVO;
-import com.xd.evaluation.exception.EvaluaionException;
+import com.xd.evaluation.exception.EvaluationException;
 import com.xd.evaluation.utils.ResultUtil;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class ExceptionHandle {
 
-    @ExceptionHandler(EvaluaionException.class)
+    @ExceptionHandler(EvaluationException.class)
     @ResponseBody
-    public ResultVO handleEvaluationException(EvaluaionException e){
+    public ResultVO handleEvaluationException(EvaluationException e){
         return ResultUtil.error(e.getCode(),e.getMessage());
     }
 

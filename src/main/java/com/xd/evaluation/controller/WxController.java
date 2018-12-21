@@ -53,7 +53,7 @@ public class WxController {
             if (user == null) {
                 //若用户第一次登录,获取并存储用户信息
                 WxMaUserInfo wxUserInfo = wxService.getUserService().getUserInfo(session.getSessionKey(), wxInfo.getEncryptedData(), wxInfo.getIv());
-                user = userService.save(new User(UniqueKeyUtil.genUniqueKey(), wxUserInfo.getOpenId(), wxUserInfo.getAvatarUrl()));
+                user = userService.save(new User(UniqueKeyUtil.getNickName(), wxUserInfo.getOpenId(), wxUserInfo.getAvatarUrl()));
                 log.info("[用户登录]用户：{}，首次登录，注册成功",session.getOpenid());
             }
             else {

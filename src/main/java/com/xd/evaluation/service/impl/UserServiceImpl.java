@@ -3,12 +3,15 @@ package com.xd.evaluation.service.impl;
 import com.xd.evaluation.dao.mapper.UserMapper;
 import com.xd.evaluation.dao.repository.UserRepository;
 import com.xd.evaluation.domain.User;
+import com.xd.evaluation.dto.EvaluationInfo;
 import com.xd.evaluation.exception.EvaluationException;
 import com.xd.evaluation.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created By Cx On 2018/10/4 22:17
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService {
             throw new EvaluationException("更改用户信息失败，服务器异常");
         }
     }
+
 }
 
 

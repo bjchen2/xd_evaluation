@@ -101,7 +101,8 @@ public class EvaluationServiceImp implements EvaluationService {
             Long userId, String key, Integer type, Integer sortType) throws Exception {
         // 先查询基础的数据
         List<Object[]> metaList;
-        if(null == key || "".equals(key)) { // 不使用关键词
+        if(null == key || "".equals(key)) {
+            // 不使用关键词
             // 当0 == type时，第一个参数为true，则不限定type搜索
             if(0 == sortType) {
                 metaList = evaluationRepository

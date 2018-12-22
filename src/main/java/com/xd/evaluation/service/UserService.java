@@ -28,6 +28,11 @@ public interface UserService {
     User findByUserId(Long userId);
 
     /**
+     * 通过userName查询某个用户
+     */
+    User findByUserName(String userName);
+
+    /**
      * 根据用户Id修改用户对象的非空信息
      */
     void updateUserByUserId(User user);

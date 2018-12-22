@@ -102,7 +102,9 @@ public class EvaluationController {
      */
     @GetMapping("/all/{userId}")
     public ResultVO returnAllEvaluationInSort(@PathVariable Long userId,
-                                              Integer sort, String key, Integer type)
+                                              @RequestParam(defaultValue = "0") Integer sort,
+                                              @RequestParam(defaultValue = "") String key,
+                                              @RequestParam(defaultValue = "0") Integer type)
             throws Exception {
         LOGGER.info("用户" + userId + "将要查询全部评价，关键词key为" + key);
         // TODO: 可以加上校验

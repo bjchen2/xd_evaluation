@@ -22,7 +22,8 @@ public class UserController {
     UserService userService;
 
     //更新用户信息：用户信息包括：用户头像URL，用户名
-    @PostMapping("/info/{userId}")
+    // todo 暂时废弃
+    // @PostMapping("/info/{userId}")
     public ResultVO updateUsernameByUserId(@PathVariable Long userId, @RequestBody User user){
         User oldUser = userService.findByUserId(userId);
         if (oldUser == null){

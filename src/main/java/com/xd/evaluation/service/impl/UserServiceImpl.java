@@ -33,12 +33,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByOpenid(String openId) {
-        return null;
+        return userRepository.findByUserOpenid(openId);
     }
 
     @Override
     public User findByUserId(Long userId) {
-        return  userRepository.findById(userId).orElse(null);
+        return userRepository.findByUserId(userId);
+    }
+
+    @Override
+    public User findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 
     @Override

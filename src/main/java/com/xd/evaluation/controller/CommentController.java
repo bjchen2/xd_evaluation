@@ -2,9 +2,11 @@ package com.xd.evaluation.controller;
 
 
 import com.xd.evaluation.VO.ResultVO;
+import com.xd.evaluation.domain.User;
 import com.xd.evaluation.dto.CommentInfo;
 import com.xd.evaluation.pojo.ComAddPojo;
 import com.xd.evaluation.service.CommentService;
+import com.xd.evaluation.service.UserService;
 import com.xd.evaluation.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public class CommentController {
     private CommentService commentService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private HttpServletRequest request;
 
     /**
@@ -40,12 +45,18 @@ public class CommentController {
     public ResultVO returnAllComment(@PathVariable Long evaluationId, @PathVariable Long userId)
         throws Exception {
         LOGGER.info("用户 " + userId + " 请求查询 " + evaluationId + " 号评价所有评论");
-        if(null == evaluationId || null == userId) {    // 异常请求
+        if(null == evaluationId || null == userId) {
+            // 异常请求
             LOGGER.error(request.getRemoteAddr() + ": 异常请求，id不能为空");
             return ResultUtil.error("id不能为空");
         }
 
         List<CommentInfo> comments = commentService.returnAllComments(evaluationId, userId);
+        for(CommentInfo comment: comments) {
+            User user = userService.findByUserId(comment.getUserId());
+            comment.setUserName(user == null ? null : user.getUserName());
+        }
+
         return ResultUtil.success(comments);
     }
 

@@ -20,6 +20,9 @@ public class CommentInfo {
     //评论人id
     private Long userId;
 
+    // 评论人用户名
+    private String userName;
+
     //评价id
     private Long evaluationId;
 

@@ -18,6 +18,8 @@ public class EvaluationInfo {
 
     private Long userId;
 
+    private String userName;
+
     private String evaluationContent;
 
     private String teacherName;

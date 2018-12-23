@@ -1,11 +1,13 @@
 package com.xd.evaluation.controller;
 
 import com.xd.evaluation.VO.ResultVO;
+import com.xd.evaluation.domain.User;
 import com.xd.evaluation.dto.EvaluationInfo;
 import com.xd.evaluation.pojo.EvaAddPojo;
 import com.xd.evaluation.pojo.EvaLikePojo;
 import com.xd.evaluation.service.CommentService;
 import com.xd.evaluation.service.EvaluationService;
+import com.xd.evaluation.service.UserService;
 import com.xd.evaluation.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ import java.util.List;
 public class EvaluationController {
     @Autowired
     private static final Logger LOGGER = LoggerFactory.getLogger(EvaluationController.class);
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EvaluationService evaluationService;
@@ -103,10 +108,18 @@ public class EvaluationController {
             throws Exception {
         LOGGER.info("用户" + userId + "将要查询全部评价，关键词key为" + key);
         // TODO: 可以加上校验
-        if(!(null == key || "".equals(key))) key = "%" + key + "%"; // 如果key不为空
+        // 如果key不为空
+        if(!(null == key || "".equals(key))) {key = "%" + key + "%";}
 
         List<EvaluationInfo> infos =
                 evaluationService.returnAllEvaluationOrder(userId, key, type, sort);
+
+        /* 给infos添加userName属性 */
+        for(EvaluationInfo info: infos) {
+            User user = userService.findByUserId(info.getUserId());
+            info.setUserName(user == null ? null : user.getUserName());
+        }
+
         return ResultUtil.success(infos);
     }
 

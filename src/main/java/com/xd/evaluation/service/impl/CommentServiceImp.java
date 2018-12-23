@@ -45,9 +45,11 @@ public class CommentServiceImp implements CommentService {
         // 假如查询不到结果
         if(commentList.isEmpty()) return null;  // 说明当前评价下没有任何评论
 
-        List<CommentInfo> comments = new ArrayList<>(); // 返回的主体
+        // 返回的主体
+        List<CommentInfo> comments = new ArrayList<>();
 
-        for(Comment comment: commentList) { // 查询出commentContent和isLike两个数据
+        for(Comment comment: commentList) {
+            // 查询出commentContent和isLike两个数据
             CommentInfo commentInfo = new CommentInfo();
             CommentContent content = commentContentRepository.findByCommentId(comment.getCommentId());
             if(content == null)
@@ -56,7 +58,8 @@ public class CommentServiceImp implements CommentService {
 
             UserLike userLike = userLikeRepository
                     .findByLikeTypeAndObjIdAndUserId(11, comment.getCommentId(), userId);
-            if(userLike == null) {  // 如果查询不到数据就说明用户没有点赞
+            if(userLike == null) {
+                // 如果查询不到数据就说明用户没有点赞
                 commentInfo.setIsLike(null);
             } else {
                 commentInfo.setIsLike(userLike.getIsLike());

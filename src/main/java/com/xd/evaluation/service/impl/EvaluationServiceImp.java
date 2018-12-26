@@ -1,13 +1,11 @@
 package com.xd.evaluation.service.impl;
 
 import com.xd.evaluation.dao.repository.*;
-import com.xd.evaluation.domain.Evaluation;
-import com.xd.evaluation.domain.EvaluationContent;
-import com.xd.evaluation.domain.Favorite;
-import com.xd.evaluation.domain.UserLike;
+import com.xd.evaluation.domain.*;
 import com.xd.evaluation.dto.EvaluationInfo;
 import com.xd.evaluation.enums.CourseTypeEnum;
 import com.xd.evaluation.service.EvaluationService;
+import com.xd.evaluation.service.UserService;
 import com.xd.evaluation.utils.EntityUtil;
 import com.xd.evaluation.utils.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +29,9 @@ import java.util.List;
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class EvaluationServiceImp implements EvaluationService {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private EvaluationRepository evaluationRepository;
@@ -138,7 +139,7 @@ public class EvaluationServiceImp implements EvaluationService {
             UserLike likeObj =
                     userLikeRepository.findByLikeTypeAndObjIdAndUserId
                             (10, info.getEvaluationId(), userId);
-            if(null != likeObj) info.setIsLike(likeObj.getIsLike());
+            if(null != likeObj) {info.setIsLike(likeObj.getIsLike());}
 
             // 查询用户是否收藏该课
             Favorite favObj = favoritesRepository
@@ -218,6 +219,11 @@ public class EvaluationServiceImp implements EvaluationService {
 
     @Override
     public void favoriteEvaluation(Long evaluationId, Long userId) throws Exception {
+        // 查询用户是否收藏过评价
+        Favorite isFavorited
+                = favoritesRepository.findByEvaluationIdAndUserId(evaluationId, userId);
+        if(isFavorited != null) { return; }
+
         Favorite record = new Favorite();
         record.setUserId(userId);
         record.setEvaluationId(evaluationId);
@@ -228,6 +234,14 @@ public class EvaluationServiceImp implements EvaluationService {
     @Override
     public void cancelFavorite(Long evaluationId, Long userId) throws Exception {
         favoritesRepository.deleteByEvaluationIdAndUserId(evaluationId, userId);
+    }
+
+    @Override
+    public void putUsernameToEvaluationInfoList(List<EvaluationInfo> infos) {
+        for(EvaluationInfo info: infos) {
+            User user = userService.findByUserId(info.getUserId());
+            info.setUserName(user == null ? null : user.getUserName());
+        }
     }
 
 

@@ -219,6 +219,11 @@ public class EvaluationServiceImp implements EvaluationService {
 
     @Override
     public void favoriteEvaluation(Long evaluationId, Long userId) throws Exception {
+        // 查询用户是否收藏过评价
+        Favorite isFavorited
+                = favoritesRepository.findByEvaluationIdAndUserId(evaluationId, userId);
+        if(isFavorited != null) { return; }
+
         Favorite record = new Favorite();
         record.setUserId(userId);
         record.setEvaluationId(evaluationId);

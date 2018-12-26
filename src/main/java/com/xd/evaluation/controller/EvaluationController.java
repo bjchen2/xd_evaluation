@@ -187,6 +187,7 @@ public class EvaluationController {
         LOGGER.info("用户" + userId + "请求收藏评价" + evaluationId);
         evaluationService.favoriteEvaluation(evaluationId, userId);
         return ResultUtil.success();
+
     }
 
     /**

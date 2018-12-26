@@ -115,10 +115,7 @@ public class EvaluationController {
                 evaluationService.returnAllEvaluationOrder(userId, key, type, sort);
 
         /* 给infos添加userName属性 */
-        for(EvaluationInfo info: infos) {
-            User user = userService.findByUserId(info.getUserId());
-            info.setUserName(user == null ? null : user.getUserName());
-        }
+        evaluationService.putUsernameToEvaluationInfoList(infos);
 
         return ResultUtil.success(infos);
     }

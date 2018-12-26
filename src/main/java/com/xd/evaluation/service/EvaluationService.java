@@ -83,4 +83,10 @@ public interface EvaluationService {
      * @throws Exception
      */
     void cancelFavorite(Long evaluationId, Long userId) throws Exception;
+
+    /**
+     * 给list中的所有EvaluationInfo添加用户id属性，根据username查找
+     * @param infos
+     */
+    void putUsernameToEvaluationInfoList(List<EvaluationInfo> infos);
 }

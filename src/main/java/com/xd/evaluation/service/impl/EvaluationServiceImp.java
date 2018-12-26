@@ -142,8 +142,8 @@ public class EvaluationServiceImp implements EvaluationService {
 
             // 查询用户是否收藏该课
             Favorite favObj = favoritesRepository
-                    .findByEvaluationIdAndUserId(info.getEvaluationId(), info.getUserId());
-            info.setIsFavorited(null == favObj);
+                    .findByEvaluationIdAndUserId(info.getEvaluationId(), userId);
+            info.setIsFavorited(null != favObj);
 
             // 查询评论数量
             Integer commentCount = commentRepository.countByEvaluationId(info.getEvaluationId());

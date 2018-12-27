@@ -200,7 +200,8 @@ public class EvaluationServiceImp implements EvaluationService {
     public List<EvaluationInfo> returnUserFavorite(Long userId) throws Exception {
         List<Object[]> metaList = evaluationRepository.findFavoriteByUserId(userId);
 
-        if(null == metaList || metaList.isEmpty()) return null;   // 查询不到就直接返回
+        // 查询不到就直接返回
+        if(null == metaList || metaList.isEmpty()) { return null;}
 
         // 对一些原始数据进行二次处理
         EntityUtil.processObjectListToEvalutionInfo(metaList);
@@ -209,7 +210,27 @@ public class EvaluationServiceImp implements EvaluationService {
                 new EvaluationInfo(1L, 1L, "111",
                         "111", "111", "111",
                         false, 1, 1, 1L);
-        return EntityUtil.castEntity(metaList, EvaluationInfo.class, temp);
+
+
+        List<EvaluationInfo> infos =
+                EntityUtil.castEntity(metaList, EvaluationInfo.class, temp);
+
+        // 添加username属性，根据userId查找
+        for(EvaluationInfo info: infos) {
+            User user = userService.findByUserId(info.getUserId());
+            info.setUserName(user == null ? null : user.getUserName());
+            // 因为是查询用户收藏的评价，所以一定是已收藏状态
+            info.setIsFavorited(true);
+            // 添加点赞状态
+            UserLike likeEntity = userLikeRepository
+                    .findByLikeTypeAndObjIdAndUserId(10, info.getEvaluationId(), userId);
+            if(likeEntity != null) { info.setIsLike(likeEntity.getIsLike()); }
+
+            // 查询评论数量
+            info.setCommentCount(commentRepository
+                    .countByEvaluationId(info.getEvaluationId()));
+        }
+        return infos;
     }
 
     @Override

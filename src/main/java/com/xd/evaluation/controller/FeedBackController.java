@@ -28,15 +28,13 @@ public class FeedBackController {
 
     //创建反馈
     @PostMapping("/{userId}")
-    public ResultVO create(@PathVariable Long userId, @Valid @RequestBody FeedbackForm feedbackForm, BindingResult bindingResult){
+    public ResultVO create(@PathVariable Long userId, @Valid FeedbackForm feedbackForm, BindingResult bindingResult){
         //验证反馈参数是否正确
         if (bindingResult.hasErrors()){
             log.error("【添加反馈】参数不正确,feedBackForm={}",feedbackForm);
             return ResultUtil.error(bindingResult.getFieldError()==null?"参数不正确":bindingResult.getFieldError().getDefaultMessage());
         }
-        Feedback feedback = new Feedback();
-        BeanUtils.copyProperties(feedbackForm,feedback);
-        feedback.setUserId(userId);
-        return ResultUtil.success(feedbackService.create(feedback));
+        feedbackService.create(feedbackForm,userId);
+        return ResultUtil.success();
     }
 }

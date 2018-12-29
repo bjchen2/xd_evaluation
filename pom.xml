@@ -87,6 +87,20 @@
             <version>3.1.0</version>
         </dependency>
 
+        <!--引入阿里云对象存储服务-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+
+        <!--引入热启动-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!--redis最后再测试-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->

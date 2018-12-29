@@ -3,6 +3,7 @@ package com.xd.evaluation.utils;
 import com.xd.evaluation.enums.CourseTypeEnum;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
@@ -21,4 +22,9 @@ public class UtilTests {
         System.out.println("value: " + a);
     }
 
+    @Test
+    public void testFile(){
+        File f = new File("");
+        System.out.println(f.canRead());
+    }
 }

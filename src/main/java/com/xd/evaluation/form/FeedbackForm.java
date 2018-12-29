@@ -1,6 +1,7 @@
 package com.xd.evaluation.form;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
@@ -19,5 +20,5 @@ public class FeedbackForm {
     @NotBlank(message = "反馈内容不能为空")
     private String content;
 
-
+    private MultipartFile file;
 }

@@ -32,6 +32,9 @@ public class Feedback {
     //反馈内容
     private String content;
 
+    //图片url
+    private String url;
+
     //创建时间
     @JsonIgnore
     private Date createTime;
